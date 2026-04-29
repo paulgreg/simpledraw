@@ -2,7 +2,7 @@
   "name": "Simple Draw",
   "short_name": "SD",
   "start_url": "./",
-  "display": "minimal-ui",
+  "display": "fullscreen",
   "theme_color": "#d423b9",
   "background_color": "#282c34",
   "icons": [

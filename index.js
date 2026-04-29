@@ -1,6 +1,5 @@
 const storageKey = 'SimpleDrawContent'
 
-const toolbarWidth = 100 // matches CSS
 const MIN_DRAW_INTERVAL = 16 // ~60fps
 
 let canvas, ctx
@@ -33,18 +32,11 @@ const throttledSaveContent = throttle((canvas) => {
 const resizeCanvas = () => {
   const dpr = window.devicePixelRatio || 1
 
-  // Set CSS size
-  canvas.style.width = `calc(100vw - ${toolbarWidth}px)`
-  canvas.style.height = '100vh'
-
-  // Set actual canvas size (device pixels)
   canvas.width = canvas.offsetWidth * dpr
   canvas.height = canvas.offsetHeight * dpr
 
-  // Scale context to handle high DPI
   ctx.scale(dpr, dpr)
 
-  // Restore drawing state
   ctx.strokeStyle = currentColor
   ctx.lineWidth = brushSize
   ctx.lineCap = 'round'
@@ -54,15 +46,6 @@ const resizeCanvas = () => {
 const setupCanvas = () => {
   canvas = document.getElementById('drawCanvas')
   ctx = canvas.getContext('2d')
-
-  let resizeTimeout
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout)
-    resizeTimeout = setTimeout(() => {
-      resizeCanvas()
-      restoreCanvas()
-    }, 100)
-  })
 
   ctx.fillStyle = 'white'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -230,6 +213,11 @@ const restoreCanvas = () => {
   }
 }
 
+const throttledResize = throttle(() => {
+  resizeCanvas()
+  restoreCanvas()
+}, 100)
+
 document.addEventListener('DOMContentLoaded', function () {
   setupCanvas()
   createColorPalette()
@@ -239,5 +227,11 @@ document.addEventListener('DOMContentLoaded', function () {
   resizeCanvas()
   restoreCanvas()
 
-  window.addEventListener('beforeunload', () => saveContent(canvas))
+  window.addEventListener('beforeunload', () => {
+    saveContent(canvas)
+  })
+
+  window.addEventListener('resize', () => {
+    throttledResize()
+  })
 })

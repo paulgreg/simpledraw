@@ -14,7 +14,14 @@ body {
   padding: 0;
 }
 
+canvas {
+  flex: 1;
+  width: calc(100vw - 100px);
+  height: 100vh;
+}
+
 .toolbar {
+  width: 100px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -24,6 +31,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   gap: 10px;
   overflow-y: auto;
+  padding-bottom: 80px;
 }
 
 .file-controls {
