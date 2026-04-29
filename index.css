@@ -1,0 +1,115 @@
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 1px solid black;
+  padding: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.file-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-btn {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.file-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.brush-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brush-size-selector {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  width: 100%;
+}
+
+.color-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.1s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-swatch.selected {
+  border: 2px solid #000;
+  transform: scale(1.1);
+}
+
+#drawCanvas {
+  flex: 1;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+@media (orientation: landscape) {
+  /*
+  .toolbar {
+    flex-direction: row;
+  }
+
+  .color-palette {
+    order: 1;
+  }
+
+  .brush-controls {
+    order: 2;
+  }
+
+  .file-controls {
+    order: 3;
+  }
+    */
+}

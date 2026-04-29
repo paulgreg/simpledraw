@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Simple Draw</title>
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Gr&eacute;gory Paul" />
+    <meta
+      name="viewport"
+      content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="Draw your sketches" />
+    <meta name="theme-color" content="#D423B9" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="picture-128.png" />
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <canvas id="drawCanvas"></canvas>
+    <div class="toolbar">
+      <div class="brush-controls">
+        <select id="brushSize" class="brush-size-selector">
+          <option value="2">Small</option>
+          <option value="5" selected>Medium</option>
+          <option value="10">Large</option>
+        </select>
+      </div>
+      <div class="color-palette" id="colorPalette"></div>
+      <div class="file-controls">
+        <button id="clearBtn" class="file-btn">Clear</button>
+        <button id="loadBtn" class="file-btn">Load</button>
+        <button id="saveBtn" class="file-btn">Save</button>
+      </div>
+    </div>
+  </body>
+  <script src="utils.js"></script>
+  <script src="index.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js')
+  </script>
+</html>
