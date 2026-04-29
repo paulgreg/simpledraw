@@ -1,6 +1,3 @@
-let currentColor = '#000000'
-let brushSize = 5
-
 const throttle = (func, delay) => {
   let timeoutId = null
   let lastArgs = null
@@ -33,35 +30,19 @@ const createColorPalette = () => {
     '#000000',
     '#333333',
     '#666666',
-    '#999999',
     '#CCCCCC',
     '#FFFFFF',
     '#FF0000',
-    '#FF3300',
     '#FF6600',
     '#FF9900',
-    '#FFCC00',
     '#FFFF00',
-    '#FFFF33',
-    '#FFFF66',
-    '#FFFF99',
-    '#FFFFCC',
     '#00FF00',
-    '#00FF33',
     '#00FF66',
     '#00FF99',
-    '#00FFCC',
     '#00FFFF',
-    '#33FFFF',
-    '#66FFFF',
-    '#99FFFF',
-    '#CCFFFF',
-    '#0000FF',
     '#0033FF',
     '#0066FF',
     '#0099FF',
-    '#00CCFF',
-    '#3300FF',
     '#6600FF',
     '#9900FF',
     '#CC00FF',
@@ -76,15 +57,18 @@ const createColorPalette = () => {
     palette.appendChild(swatch)
   })
 
-  selectColor(colors[0])
+  // Select initial color from settings if available, otherwise use default (black)
+  if (globalThis?.appSettings?.currentColor) {
+    selectColor(globalThis.appSettings.currentColor)
+  } else {
+    selectColor(colors[0])
+  }
 }
 
 const selectColor = (color) => {
-  currentColor = color
   ctx.strokeStyle = color
 
   const rgbColor = hexToRgb(color)
-
   const swatches = document.querySelectorAll('.color-swatch')
   for (let swatch of swatches) {
     swatch.classList.remove('selected')
@@ -92,15 +76,24 @@ const selectColor = (color) => {
       swatch.classList.add('selected')
     }
   }
+
+  if (color !== globalThis.appSettings.currentColor) {
+    globalThis.appSettings.currentColor = color
+    saveSettings()
+  }
 }
 
 const setupBrushControls = () => {
   const brushSizeSelect = document.getElementById('brushSize')
+
+  if (globalThis?.appSettings?.brushSize) {
+    globalThis.brushSize = globalThis.appSettings.brushSize
+    brushSizeSelect.value = brushSize.toString()
+  }
+
   brushSizeSelect.addEventListener('change', (e) => {
     const newSize = Number.parseInt(e.target.value)
-    if (newSize !== brushSize) {
-      brushSize = newSize
-      ctx.lineWidth = brushSize
-    }
+    ctx.lineWidth = globalThis.appSettings.brushSize = newSize
+    globalThis.saveSettings()
   })
 }

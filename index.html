@@ -17,7 +17,9 @@
   </head>
   <body>
     <canvas id="drawCanvas"></canvas>
-    <button id="toggleToolbar" class="round-btn toggle-btn">☰</button>
+    <button id="toggleToolbar" class="round-btn toggle-btn top-position">
+      ☰
+    </button>
     <div class="toolbar">
       <button id="closeToolbar" class="round-btn close-btn">x</button>
       <div class="brush-controls">
@@ -25,6 +27,10 @@
           <option value="2">Small</option>
           <option value="5" selected>Medium</option>
           <option value="10">Large</option>
+        </select>
+        <select id="toolbarPosition" class="toolbar-position-selector">
+          <option value="top-right">on top</option>
+          <option value="bottom-right">on bottom</option>
         </select>
       </div>
       <div class="color-palette" id="colorPalette"></div>

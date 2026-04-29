@@ -1,8 +1,18 @@
-const storageKey = 'SimpleDrawContent'
+const drawingKey = 'SimpleDrawContent'
+const settingsKey = 'SimpleDrawSettings'
 
 const MIN_DRAW_INTERVAL = 16 // ~60fps
 
+const defaultSettings = {
+  toolbarVisible: true,
+  toolbarPosition: 'top-right',
+  brushSize: 5,
+  currentColor: '#000000',
+}
+
 let canvas, ctx
+
+globalThis.appSettings = { ...defaultSettings }
 let isDrawing = false
 let isDrawingOptimized = false
 let hasChanged = false
@@ -19,7 +29,7 @@ const saveContent = (canvas) => {
       dataUrl: canvas.toDataURL('image/png'),
     }
     console.debug('saveContent', data)
-    localStorage.setItem(storageKey, JSON.stringify(data))
+    localStorage.setItem(drawingKey, JSON.stringify(data))
   } catch (error) {
     console.warn('Failed to save to localStorage:', error.message)
   }
@@ -29,8 +39,31 @@ const throttledSaveContent = throttle((canvas) => {
   saveContent(canvas)
 }, 2000)
 
+const saveSettings = () => {
+  try {
+    localStorage.setItem(settingsKey, JSON.stringify(appSettings))
+  } catch (error) {
+    console.warn('Failed to save settings to localStorage:', error.message)
+  }
+}
+
+// Make saveSettings available globally
+globalThis.saveSettings = saveSettings
+
+const loadSettings = () => {
+  try {
+    const savedSettings = localStorage.getItem(settingsKey)
+    if (savedSettings) {
+      const parsedSettings = JSON.parse(savedSettings)
+      globalThis.appSettings = { ...defaultSettings, ...parsedSettings }
+    }
+  } catch (error) {
+    console.warn('Failed to load settings from localStorage:', error.message)
+  }
+}
+
 const resizeCanvas = () => {
-  const dpr = window.devicePixelRatio || 1
+  const dpr = globalThis.devicePixelRatio || 1
 
   // Get the actual visible width of the canvas
   const canvasRect = canvas.getBoundingClientRect()
@@ -39,8 +72,8 @@ const resizeCanvas = () => {
 
   ctx.scale(dpr, dpr)
 
-  ctx.strokeStyle = currentColor
-  ctx.lineWidth = brushSize
+  ctx.strokeStyle = globalThis.appSettings.currentColor
+  ctx.lineWidth = globalThis.appSettings.brushSize
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
 }
@@ -121,18 +154,51 @@ const setupToolbarToggle = () => {
   const toggleBtn = document.getElementById('toggleToolbar')
   const closeBtn = document.getElementById('closeToolbar')
 
+  // Set initial toolbar visibility
+  if (!appSettings.toolbarVisible) {
+    toolbar.classList.add('hidden')
+  }
+
   toggleBtn.addEventListener('click', () => {
     toolbar.classList.toggle('hidden')
+    appSettings.toolbarVisible = !toolbar.classList.contains('hidden')
+    saveSettings()
   })
 
   closeBtn.addEventListener('click', () => {
     toolbar.classList.add('hidden')
+    appSettings.toolbarVisible = false
+    saveSettings()
   })
+}
+
+const setupToolbarPosition = () => {
+  const positionSelect = document.getElementById('toolbarPosition')
+
+  positionSelect.value = appSettings.toolbarPosition
+  updateToolbarPosition()
+
+  positionSelect.addEventListener('change', (e) => {
+    appSettings.toolbarPosition = e.target.value
+    saveSettings()
+    updateToolbarPosition()
+  })
+}
+
+const updateToolbarPosition = () => {
+  const toggleBtn = document.getElementById('toggleToolbar')
+  if (appSettings.toolbarPosition === 'bottom-right') {
+    toggleBtn.classList.add('bottom-position')
+    toggleBtn.classList.remove('top-position')
+  } else {
+    toggleBtn.classList.add('top-position')
+    toggleBtn.classList.remove('bottom-position')
+  }
 }
 
 const clearImage = () => {
   if (confirm('clear ?')) {
-    localStorage.clear()
+    localStorage.setItem(drawingKey, undefined)
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
   }
@@ -193,7 +259,7 @@ const loadImage = () => {
 
 const restoreCanvas = () => {
   try {
-    const savedData = localStorage.getItem(storageKey)
+    const savedData = localStorage.getItem(drawingKey)
     if (savedData) {
       const data = JSON.parse(savedData)
 
@@ -205,7 +271,7 @@ const restoreCanvas = () => {
       const img = new Image()
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        const dpr = window.devicePixelRatio || 1
+        const dpr = globalThis.devicePixelRatio || 1
         ctx.drawImage(
           img,
           0,
@@ -235,20 +301,24 @@ const throttledResize = throttle(() => {
 }, 100)
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Load settings first
+  loadSettings()
+
   setupCanvas()
   createColorPalette()
   setupBrushControls()
   setupFileControls()
   setupToolbarToggle()
+  setupToolbarPosition()
 
   resizeCanvas()
   restoreCanvas()
 
-  window.addEventListener('beforeunload', () => {
+  globalThis.addEventListener('beforeunload', () => {
     saveContent(canvas)
   })
 
-  window.addEventListener('resize', () => {
+  globalThis.addEventListener('resize', () => {
     throttledResize()
   })
 })

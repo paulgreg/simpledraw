@@ -22,7 +22,6 @@ canvas {
 
 .round-btn {
   position: absolute;
-  top: 10px;
   right: 10px;
   width: 30px;
   height: 30px;
@@ -35,6 +34,17 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: top 0.3s ease, bottom 0.3s ease;
+}
+
+.round-btn.top-position {
+  top: 10px;
+  bottom: auto;
+}
+
+.round-btn.bottom-position {
+  bottom: 10px;
+  top: auto;
 }
 
 .round-btn:hover {
@@ -69,6 +79,7 @@ canvas {
 }
 
 .close-btn {
+  top: 10px;
   z-index: 101;
 }
 
@@ -108,6 +119,16 @@ canvas {
   background-color: white;
   cursor: pointer;
   width: 100%;
+}
+
+.toolbar-position-selector {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
 }
 
 .color-palette {
