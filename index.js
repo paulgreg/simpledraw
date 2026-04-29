@@ -32,8 +32,10 @@ const throttledSaveContent = throttle((canvas) => {
 const resizeCanvas = () => {
   const dpr = window.devicePixelRatio || 1
 
-  canvas.width = canvas.offsetWidth * dpr
-  canvas.height = canvas.offsetHeight * dpr
+  // Get the actual visible width of the canvas
+  const canvasRect = canvas.getBoundingClientRect()
+  canvas.width = canvasRect.width * dpr
+  canvas.height = canvasRect.height * dpr
 
   ctx.scale(dpr, dpr)
 
@@ -112,6 +114,20 @@ const setupFileControls = () => {
   document.getElementById('clearBtn').addEventListener('click', clearImage)
   document.getElementById('saveBtn').addEventListener('click', saveImage)
   document.getElementById('loadBtn').addEventListener('click', loadImage)
+}
+
+const setupToolbarToggle = () => {
+  const toolbar = document.querySelector('.toolbar')
+  const toggleBtn = document.getElementById('toggleToolbar')
+  const closeBtn = document.getElementById('closeToolbar')
+
+  toggleBtn.addEventListener('click', () => {
+    toolbar.classList.toggle('hidden')
+  })
+
+  closeBtn.addEventListener('click', () => {
+    toolbar.classList.add('hidden')
+  })
 }
 
 const clearImage = () => {
@@ -223,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
   createColorPalette()
   setupBrushControls()
   setupFileControls()
+  setupToolbarToggle()
 
   resizeCanvas()
   restoreCanvas()

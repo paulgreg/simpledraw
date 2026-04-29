@@ -8,36 +8,76 @@ body {
 }
 
 body {
-  display: flex;
-  flex-direction: row;
+  display: block;
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 canvas {
   flex: 1;
-  width: calc(100vw - 100px);
+  width: 100vw;
   height: 100vh;
 }
 
+.round-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  color: black;
+  border-color: black;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.round-btn:hover {
+  background-color: #e0e0e0;
+}
+
 .toolbar {
-  width: 100px;
+  width: 148px;
+  height: calc(100vh - 16px); /* 16px is 2 x 8px (padding) */
+  position: absolute;
+  right: 0;
+  top: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  align-content: space-between;
   border-left: 1px solid black;
   padding: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: white;
   gap: 10px;
   overflow-y: auto;
-  padding-bottom: 80px;
+  z-index: 2;
+}
+
+.toolbar.hidden {
+  display: none;
+}
+
+.toggle-btn {
+  z-index: 1;
+}
+
+.close-btn {
+  z-index: 101;
 }
 
 .file-controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .file-btn {
@@ -47,11 +87,12 @@ canvas {
   background-color: white;
   cursor: pointer;
   transition: background-color 0.2s;
-  width: 100%;
+  flex: 1;
+  min-width: 48px;
 }
 
 .file-btn:hover {
-  background-color: #f0f0f0;
+  background-color: #333;
 }
 
 .brush-controls {
@@ -95,29 +136,9 @@ canvas {
 }
 
 #drawCanvas {
-  flex: 1;
   border: 1px solid #ddd;
   background-color: white;
   cursor: crosshair;
   touch-action: none;
-}
-
-@media (orientation: landscape) {
-  /*
-  .toolbar {
-    flex-direction: row;
-  }
-
-  .color-palette {
-    order: 1;
-  }
-
-  .brush-controls {
-    order: 2;
-  }
-
-  .file-controls {
-    order: 3;
-  }
-    */
+  display: block;
 }

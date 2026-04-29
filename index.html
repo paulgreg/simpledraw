@@ -17,7 +17,9 @@
   </head>
   <body>
     <canvas id="drawCanvas"></canvas>
+    <button id="toggleToolbar" class="round-btn toggle-btn">☰</button>
     <div class="toolbar">
+      <button id="closeToolbar" class="round-btn close-btn">x</button>
       <div class="brush-controls">
         <select id="brushSize" class="brush-size-selector">
           <option value="2">Small</option>
@@ -27,9 +29,9 @@
       </div>
       <div class="color-palette" id="colorPalette"></div>
       <div class="file-controls">
-        <button id="clearBtn" class="file-btn">Clear</button>
         <button id="loadBtn" class="file-btn">Load</button>
         <button id="saveBtn" class="file-btn">Save</button>
+        <button id="clearBtn" class="file-btn">Clear</button>
       </div>
     </div>
   </body>
