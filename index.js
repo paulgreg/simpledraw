@@ -63,14 +63,10 @@ const loadSettings = () => {
 }
 
 const resizeCanvas = () => {
-  const dpr = globalThis.devicePixelRatio || 1
-
   // Get the actual visible width of the canvas
   const canvasRect = canvas.getBoundingClientRect()
-  canvas.width = canvasRect.width * dpr
-  canvas.height = canvasRect.height * dpr
-
-  ctx.scale(dpr, dpr)
+  canvas.width = canvasRect.width
+  canvas.height = canvasRect.height
 
   ctx.strokeStyle = globalThis.appSettings.currentColor
   ctx.lineWidth = globalThis.appSettings.brushSize
@@ -207,29 +203,7 @@ const clearImage = () => {
 const saveImage = () => {
   const link = document.createElement('a')
   link.download = 'drawing.png'
-
-  // Create temporary canvas at CSS resolution for export
-  const exportCanvas = document.createElement('canvas')
-  const exportCtx = exportCanvas.getContext('2d')
-
-  // Set export canvas to CSS dimensions (not device pixels)
-  exportCanvas.width = canvas.offsetWidth
-  exportCanvas.height = canvas.offsetHeight
-
-  // Draw current canvas content, scaled down from device pixels to CSS pixels
-  exportCtx.drawImage(
-    canvas,
-    0,
-    0,
-    canvas.width,
-    canvas.height,
-    0,
-    0,
-    exportCanvas.width,
-    exportCanvas.height
-  )
-
-  link.href = exportCanvas.toDataURL('image/png')
+  link.href = canvas.toDataURL('image/png')
   link.click()
 }
 
@@ -271,18 +245,7 @@ const restoreCanvas = () => {
       const img = new Image()
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        const dpr = globalThis.devicePixelRatio || 1
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          img.width,
-          img.height,
-          0,
-          0,
-          img.width / dpr,
-          img.height / dpr
-        )
+        ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height)
         console.debug('restore canvas')
       }
       img.onerror = (error) => {
