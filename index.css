@@ -47,8 +47,10 @@ canvas {
   top: auto;
 }
 
-.round-btn:hover {
-  background-color: #e0e0e0;
+@media (pointer: fine) {
+  .round-btn:hover {
+    background-color: #b5b5b5;
+  }
 }
 
 .toolbar {
@@ -102,8 +104,10 @@ canvas {
   min-width: 48px;
 }
 
-.file-btn:hover {
-  background-color: #333;
+@media (pointer: fine) {
+  .file-btn:hover {
+    background-color: #b5b5b5;
+  }
 }
 
 .brush-controls {
@@ -147,8 +151,10 @@ canvas {
   transition: transform 0.1s;
 }
 
-.color-swatch:hover {
-  transform: scale(1.1);
+@media (pointer: fine) {
+  .color-swatch:hover {
+    transform: scale(1.1);
+  }
 }
 
 .color-swatch.selected {
